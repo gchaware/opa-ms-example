@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: offer
-        image: offer:latest
+        image: gchaware/opa-example-offer:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -53,7 +53,7 @@ spec:
     spec:
       containers:
       - name: customer
-        image: customer:latest
+        image: gchaware/opa-example-customer:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
       - name: authorisation
-        image: authorisation:latest
+        image: gchaware/opa-example-authorisation:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -197,7 +197,7 @@ spec:
     spec:
       containers:
       - name: ui
-        image: ui:latest
+        image: gchaware/opa-example-ui:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
