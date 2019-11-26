@@ -32,9 +32,8 @@ ui-6f87bb9f4-94zpt               1/1     Running   0          56m
 
 8. At first, you will not see any offers listed, and if you try  `Create Offer`, the operation will fail. This is because the authorisation is not set yet.
 
-9. Add the authorisation policy to OPA using 
+9. To add the authorisation, first set the SERVICE_URL using ```export SERVICE_URL=`minikube service ui --url` ```
+And then, update the policy using 
 
-```export SERVICE_URL=\`minikube service ui --url\`
-
-curl -X PUT --data-binary @policies/httpapi.authz.rego $SERVICE_URL/authorisation/v1/policies/httpapi/authz```
+```curl -X PUT --data-binary @policies/httpapi.authz.rego $SERVICE_URL/authorisation/v1/policies/httpapi/authz```
 
