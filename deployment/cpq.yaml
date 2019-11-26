@@ -1,0 +1,224 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: offer
+  namespace: default
+  labels:
+    app: offer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: offer
+  template:
+    metadata:
+      labels:
+        app: offer
+    spec:
+      containers:
+      - name: offer
+        image: offer:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: offer
+spec:
+  selector:
+    app: offer
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: offer-http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer
+  namespace: default
+  labels:
+    app: customer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer
+  template:
+    metadata:
+      labels:
+        app: customer
+    spec:
+      containers:
+      - name: customer
+        image: customer:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer
+spec:
+  selector:
+    app: customer
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: customer-http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authorisation
+  namespace: default
+  labels:
+    app: authorisation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authorisation
+  template:
+    metadata:
+      labels:
+        app: authorisation
+    spec:
+      containers:
+      - name: authorisation
+        image: authorisation:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+      - name: opa
+        image: openpolicyagent/opa:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8181
+        args:
+          - "run" 
+          - "--server"
+          - "--set=decision_logs.console=true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authorisation
+spec:
+  selector:
+    app: authorisation
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: authorisation-http
+  - port: 8181
+    targetPort: 8181
+    name: opa-http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    user  nginx;
+    worker_processes  1;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+
+    events {
+        worker_connections  1024;
+    }
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                            '$status $body_bytes_sent "$http_referer" '
+                            '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log  /var/log/nginx/access.log  main;
+
+        keepalive_timeout  65;
+        
+        server {
+            listen 80;
+            location / {
+              root    /usr/share/nginx/html;
+            }
+
+            location /offer {
+                auth_request /auth;
+                proxy_pass http://offer:8080;
+            }
+
+            location /customer {
+                auth_request /auth;
+                proxy_pass http://customer:8080;
+            }
+            location /authorisation/ {
+                proxy_pass http://authorisation:8181/;
+            }
+
+            location /auth {
+                internal;
+                proxy_pass http://authorisation:8080/authorise;
+                proxy_pass_header  Authorization;
+                proxy_set_header Authorization $http_authorization;
+                proxy_pass_request_body off;
+                proxy_set_header Content-Length "";
+                proxy_set_header X-Original-URI $request_uri;
+                proxy_set_header X-Original-METHOD $request_method;
+            }
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+  namespace: default
+  labels:
+    app: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+      - name: ui
+        image: ui:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui
+spec:
+  selector:
+    app: ui
+  ports:
+  - port: 80
+    targetPort: 80
+    name: nginx-http
+  type: NodePort

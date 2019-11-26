@@ -1,0 +1,17 @@
+.info-text  {
+  background-color : #9bbbb9
+}
+
+.inline {
+  display: inline
+}
+
+.offer-list {
+  height: 50px;
+}
+.right-aligned {
+  position: relative;
+  float: right;
+  text-align: right;
+  padding-right: 10px;
+}
