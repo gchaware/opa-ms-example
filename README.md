@@ -20,7 +20,8 @@ You should have `minikube` and `kubectl` installed on your machine before runnin
 5. Check if all the deployments are up and running
 ```kubectl get pods```
 
-```NAME                             READY   STATUS    RESTARTS   AGE
+```
+NAME                             READY   STATUS    RESTARTS   AGE
 authorisation-785794bff5-vxqgj   2/2     Running   0          56m
 customer-5fb899fb9d-986m7        1/1     Running   0          56m
 offer-654cb448b8-sk8q4           1/1     Running   0          56m
@@ -35,6 +36,8 @@ ui-6f87bb9f4-94zpt               1/1     Running   0          56m
 9. To add the authorisation, first set the SERVICE_URL using ```export SERVICE_URL=`minikube service ui --url` ```
 And then, update the policy using 
 
-```curl -X PUT --data-binary @policies/httpapi.authz.rego \
-$SERVICE_URL/authorisation/v1/policies/httpapi/authz```
+```
+curl -X PUT --data-binary @policies/httpapi.authz.rego \
+$SERVICE_URL/authorisation/v1/policies/httpapi/authz
+```
 
