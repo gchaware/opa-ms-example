@@ -3,7 +3,7 @@ This repository contains the code for sample application created for explaining 
 
 # Deploying on Minikube
 
-The example can be deployed on minikube by using the pre-compiled images on docker hub and the `Deployment\cpq.yaml` file.
+The example can be deployed on minikube by using the pre-compiled images on docker hub and the `deployment\cpq.yaml` file.
 You should have `minikube` and `kubectl` installed on your machine before running this example.
 
 1. Start the minikube cluster using
@@ -15,9 +15,9 @@ You should have `minikube` and `kubectl` installed on your machine before runnin
 ```cd <REPO_PATH>/opa-ms-example```
 
 4. Deploy the application using 
-```kubectl apply -f Deployment/cpq.yaml```
+```kubectl apply -f deployment/cpq.yaml```
 
-5. Check if all the deployments are up and running
+5. Check if all the pods are up and running
 ```kubectl get pods```
 
 ```
