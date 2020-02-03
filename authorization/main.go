@@ -63,6 +63,6 @@ func authRequest(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/authorise", authRequest).Methods("GET")
+	router.HandleFunc("/authorize", authRequest).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

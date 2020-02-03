@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
       - name: authorisation
-        image: gchaware/opa-example-authorisation:latest
+        image: gchaware/opa-example-authorization:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -106,14 +106,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: authorisation
+  name: authorization
 spec:
   selector:
-    app: authorisation
+    app: authorization
   ports:
   - port: 8080
     targetPort: 8080
-    name: authorisation-http
+    name: authorization-http
   - port: 8181
     targetPort: 8181
     name: opa-http
@@ -161,13 +161,13 @@ data:
                 auth_request /auth;
                 proxy_pass http://customer:8080;
             }
-            location /authorisation/ {
-                proxy_pass http://authorisation:8181/;
+            location /authorization/ {
+                proxy_pass http://authorization:8181/;
             }
 
             location /auth {
                 internal;
-                proxy_pass http://authorisation:8080/authorise;
+                proxy_pass http://authorization:8080/authorise;
                 proxy_pass_header  Authorization;
                 proxy_set_header Authorization $http_authorization;
                 proxy_pass_request_body off;
