@@ -73,22 +73,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authorisation
+  name: authorization
   namespace: default
   labels:
-    app: authorisation
+    app: authorization
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: authorisation
+      app: authorization
   template:
     metadata:
       labels:
-        app: authorisation
+        app: authorization
     spec:
       containers:
-      - name: authorisation
+      - name: authorization
         image: gchaware/opa-example-authorization:latest
         imagePullPolicy: IfNotPresent
         ports:
@@ -167,7 +167,7 @@ data:
 
             location /auth {
                 internal;
-                proxy_pass http://authorization:8080/authorise;
+                proxy_pass http://authorization:8080/authorize;
                 proxy_pass_header  Authorization;
                 proxy_set_header Authorization $http_authorization;
                 proxy_pass_request_body off;
