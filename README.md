@@ -1,5 +1,5 @@
 # opa-ms-sample
-This repository contains the code for sample application created for explaining the use of OPA for microservices authorisation.
+This repository contains the code for sample application created for explaining the use of OPA for microservices authorization.
 
 # Deploying on Minikube
 
@@ -31,9 +31,11 @@ ui-6f87bb9f4-94zpt               1/1     Running   0          56m
 
 7. Open a browser and past the URL above to navigate to the application.
 
-8. At first, you will not see any offers listed, and if you try  `Create Offer`, the operation will fail. This is because the authorisation is not set yet.
+8. Select a role from the dropdown on the page to start experimenting. If you don't select a role, the required `Authorization` header will not be set causing intended failures.
 
-9. To add the authorisation, first set the SERVICE_URL using ```export SERVICE_URL=`minikube service ui --url` ```
+8. At first, you will not see any offers listed, and if you try  `Create Offer`, the operation will fail. This is because the authorization is not set yet.
+
+9. To add the authorization, first set the SERVICE_URL using ```export SERVICE_URL=`minikube service ui --url` ```
 And then, update the policy using 
 
 ```
