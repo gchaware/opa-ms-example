@@ -17,7 +17,8 @@ class CallComponent extends React.Component {
             offerResult: "",
             resultMessage: "",
             offerid: "",
-            saveMode: 0
+            saveMode: 0,
+            roleSelected: false
         }
     }
     
@@ -52,25 +53,29 @@ class CallComponent extends React.Component {
     }
 
     changeRole = (event) => {
-        var isSalesRole,isSalesSupportRole,currentJwt,isSalesAdminRole;
+        var isSalesRole,isSalesSupportRole,currentJwt,isSalesAdminRole,roleSelected;
         if (event.target.value === "1")
         {
             isSalesRole = true;
+            roleSelected = true;
             currentJwt = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJMb2NhbEpXVElzc3VlciIsImlhdCI6MTU3MzcyNzM5MSwiZXhwIjo0MDk4MjQ1Mzc4LCJhdWQiOiJvcGEtZXhhbXBsZS5jb20iLCJzdWIiOiJzYWxlc0BleGFtcGxlLmNvbSIsIkdpdmVuTmFtdyI6IkpvaG5ueSIsIlN1cm5hbWUiOiJTYWxlcyIsIkVtYWlsIjoianNhbGVzQGV4YW1wbGUuY29tIiwiUm9sZSI6IlNhbGVzIn0.UbHWQpCMwupzsFp8f0CQ4o_bJSVaBugKijhcURZ_Mko"
         } else if (event.target.value === "2") {
             isSalesSupportRole = true;
+            roleSelected = true;
             currentJwt = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJMb2NhbEpXVElzc3VlciIsImlhdCI6MTU3MzcyNzM5MSwiZXhwIjo0MDk4MjQ1Mzc4LCJhdWQiOiJvcGEtZXhhbXBsZS5jb20iLCJzdWIiOiJzYWxlc0BleGFtcGxlLmNvbSIsIkdpdmVuTmFtdyI6IlJvbm55IiwiU3VybmFtZSI6IkRlcHAiLCJFbWFpbCI6InJkZXBwQGV4YW1wbGUuY29tIiwiUm9sZSI6IlNhbGVzIFN1cHBvcnQifQ.idRAEBhxDVSIaBIfY_Hg2qR9g919JfRMQVNojBdwAIY"
         } else if (event.target.value === "3") {
             isSalesAdminRole = true;
+            roleSelected = true;
             currentJwt = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NzQ2NjM3MDAsImV4cCI6NDA5OTE4NTMwMCwiYXVkIjoib3BhLWV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjoiU2FsZXMgQWRtaW4ifQ._UtjZtowF3NNN3IF1t0LBHuzQhdfIfsO8jC-46GvbRM"
         }else {
             isSalesRole = false;
             isSalesSupportRole = false;
             isSalesAdminRole = false;
+            roleSelected = false;
             currentJwt=""
         }
         this.getOffers(currentJwt);
-        this.setState({isSalesRole, isSalesSupportRole,isSalesAdminRole,currentJwt,offerResult:""});
+        this.setState({isSalesRole, isSalesSupportRole,isSalesAdminRole,currentJwt,roleSelected,offerResult:""});
     }
 
     handleTitleChange = (e) => {
@@ -245,7 +250,7 @@ class CallComponent extends React.Component {
             {resultStatement}
             <header>
                 <h2 className="inline">Get Offers</h2>
-                <div className="inline right-aligned"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#OfferModal">Create Offer</button></div>
+                <div className="inline right-aligned"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#OfferModal" disabled={!this.state.roleSelected}>Create Offer</button></div>
             </header>
             {this.state.offerList}
           </div>
