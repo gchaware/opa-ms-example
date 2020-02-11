@@ -17,7 +17,7 @@ type offer struct {
 	Title    string `json:"title"`
 	Customer string `json:"customerid"`
 	Segment  string `json:"segment"`
-	Comments string `json:"comments"`
+	Comments string `json:"notes"`
 }
 
 type allOffers = []offer

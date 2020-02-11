@@ -37,7 +37,7 @@ class CallComponent extends React.Component {
                             <div className="inline"><b>{offer.offerid}</b> : {offer.title} </div>
                             <div className="inline right-aligned">
                                 <button type="button" className="btn btn-raised btn-info" 
-                                        onClick={this.handleEditClick(offer.offerid,offer.title,offer.customerid,offer.segment,offer.comments)} 
+                                        onClick={this.handleEditClick(offer.offerid,offer.title,offer.customerid,offer.segment,offer.notes)} 
                                         data-toggle="modal" data-target="#OfferModal">Edit</button>
                                 <button type="button" className="ml-3 btn btn-raised btn-info" 
                                         onClick={this.deleteOffer(offer.offerid)}>Delete</button>
